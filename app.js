@@ -1,19 +1,25 @@
+function geraNumAleatorio(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 alert("Bem vindo(a) ao jogo do número secreto!");
 
 let chute;
-let numeroSecreto = 5;
 let tentativas = 5;
+let min = 1;
+let max = 10;
+let numeroSecreto = geraNumAleatorio(min, max);
+console.log(numeroSecreto);
 
 while (true) {
-  let chute = parseInt(prompt("Chute um número de 1 a 10"));
+  let chute = parseInt(prompt(`Chute um número de ${min} a ${max}`));
 
   console.log("Resultado da comparação: ", chute == numeroSecreto);
 
   if (chute == numeroSecreto) {
-    console.log(`Parabéns, você acertou! O número secreto é ${numeroSecreto}`);
+    alert(`Parabéns, você acertou! O número secreto é ${numeroSecreto}`);
     break;
   } else {
-    tentativas--;
     if (tentativas == 0) {
       alert("Suas tentativas acabaram! Tente novamente mais tarde.");
       break;
@@ -27,5 +33,6 @@ while (true) {
         `Que pena, você errou! O número secreto é menor que ${chute}. Você ainda tem ${tentativas} ${palavraTentativa}.`
       );
     }
+    tentativas--;
   }
 }
