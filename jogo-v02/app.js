@@ -7,6 +7,7 @@ let numChutados = [];
 function exibirTextoNaTela(tag, texto) {
   let campo = document.querySelector(tag);
   campo.innerHTML = texto;
+  responsiveVoice.speak(texto, "Brazilian Portuguese Female", { rate: 1.2 });
 }
 
 function gerarNumSecreto() {
@@ -39,6 +40,11 @@ function desabilitarBotaoReiniciar() {
   botao.setAttribute("disabled", "true");
 }
 
+function habilitarBotaoChutar() {
+  let botao = document.getElementById("chutar");
+  botao.removeAttribute("disabled");
+}
+
 function desabilitarBotaoChutar() {
   let botao = document.getElementById("chutar");
   botao.setAttribute("disabled", "true");
@@ -52,6 +58,7 @@ function reiniciarJogo() {
   numSecreto = gerarNumSecreto();
   numChutados = [];
   desabilitarBotaoReiniciar();
+  habilitarBotaoChutar();
 }
 
 function verificarChute() {
