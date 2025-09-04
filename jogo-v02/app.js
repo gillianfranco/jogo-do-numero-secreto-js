@@ -1,6 +1,7 @@
 let numSorteados = [];
+let numLimite = 10;
 let numSecreto = gerarNumSecreto();
-let tentativas = 1;
+let tentativas = 0;
 let numChutados = [];
 
 function exibirTextoNaTela(tag, texto) {
@@ -9,7 +10,12 @@ function exibirTextoNaTela(tag, texto) {
 }
 
 function gerarNumSecreto() {
-  let num = Math.floor(Math.random() * 3 + 1);
+  let num = Math.floor(Math.random() * numLimite + 1);
+
+  if (numSorteados.length >= numLimite) {
+    numSorteados = [];
+  }
+
   if (numSorteados.includes(num)) {
     return gerarNumSecreto();
   } else {
@@ -33,11 +39,16 @@ function desabilitarBotaoReiniciar() {
   botao.setAttribute("disabled", "true");
 }
 
+function desabilitarBotaoChutar() {
+  let botao = document.getElementById("chutar");
+  botao.setAttribute("disabled", "true");
+}
+
 function reiniciarJogo() {
   exibirTextoNaTela("h1", "Jogo do Número Secreto");
   exibirTextoNaTela("p", "Escolha um número entre 1 e 10");
   limparCampo();
-  tentativas = 1;
+  tentativas = 0;
   numSecreto = gerarNumSecreto();
   numChutados = [];
   desabilitarBotaoReiniciar();
@@ -57,7 +68,8 @@ function verificarChute() {
     alert(`O número ${chute} já foi chutado. Tente outro número.`);
     limparCampo();
   } else {
-    numChutados += chute;
+    numChutados.push(chute);
+    tentativas++;
 
     if (chute == numSecreto) {
       let palavraTentativa = tentativas > 1 ? "tentativas" : "tentativa";
@@ -68,23 +80,29 @@ function verificarChute() {
         `Você descobriu o número secreto em ${tentativas} ${palavraTentativa}`
       );
       habilitarBotaoReiniciar();
+      desabilitarBotaoChutar();
     } else {
       exibirTextoNaTela("h1", "Errou!");
-      if (numSecreto > chute) {
-        exibirTextoNaTela(
-          "p",
-          "Tente novamente! O número secreto é maior que " + chute
-        );
-      } else {
-        exibirTextoNaTela(
-          "p",
-          "Tente novamente! O número secreto é menor que " + chute
-        );
-      }
 
-      tentativas++;
-      limparCampo();
+      if (tentativas >= 3) {
+        alert("Suas tentativas se esgotaram. Tente novamente mais tarde");
+        reiniciarJogo();
+      } else {
+        if (numSecreto > chute) {
+          exibirTextoNaTela(
+            "p",
+            "Tente novamente! O número secreto é maior que " + chute
+          );
+        } else {
+          exibirTextoNaTela(
+            "p",
+            "Tente novamente! O número secreto é menor que " + chute
+          );
+        }
+      }
     }
+
+    limparCampo();
   }
 }
 
